@@ -30,9 +30,9 @@ input UpdateUserInput {
 }
 
 type UserEntity {
-  createAt: DateTime!
+  createdAt: DateTime!
   email: String!
   id: ID!
   name: String
-  updateAt: DateTime!
+  updatedAt: DateTime!
 }
