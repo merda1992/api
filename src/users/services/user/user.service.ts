@@ -7,10 +7,8 @@ import { CreateUserInput } from 'src/users/inputs/create-user.inputs';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(UserEntity)
-    private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  @InjectRepository(UserEntity)
+  private readonly userRepository: Repository<UserEntity>;
 
   async createUser(userInput: CreateUserInput): Promise<UserEntity> {
     return await this.userRepository.save({ ...userInput });

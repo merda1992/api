@@ -8,7 +8,7 @@ import { UserEntity } from '../../entities/user.entity';
 
 @Resolver('User')
 export class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  private readonly userService: UserService
 
   @Mutation(() => UserEntity)
   async createUser(
