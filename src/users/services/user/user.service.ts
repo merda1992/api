@@ -1,17 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from 'src/users/entities/user.entity';
-import { UpdateUserInput } from 'src/users/inputs/update-user.inputs';
+import { UserEntity } from '../../entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserInput } from 'src/users/inputs/create-user.inputs';
+import { CreateUserInput } from '../../inputs/create-user.input';
+import { UpdateUserInput } from '../../inputs/update-user.input';
 
 @Injectable()
 export class UserService {
-  @InjectRepository(UserEntity)
-  private readonly userRepository: Repository<UserEntity>;
+  constructor(
+    @InjectRepository(UserEntity)
+    private readonly userRepository: Repository<UserEntity>,
+  ) {}
 
-  async createUser(userInput: CreateUserInput): Promise<UserEntity> {
-    return await this.userRepository.save({ ...userInput });
+  async createUser(createUserInput: CreateUserInput): Promise<UserEntity> {
+    return await this.userRepository.save({ ...createUserInput });
   }
 
   async getOneUser(id: number): Promise<UserEntity> {
@@ -24,7 +26,6 @@ export class UserService {
 
   async removeUser(id: number): Promise<number> {
     await this.userRepository.delete({ id });
-
     return id;
   }
 
@@ -33,7 +34,6 @@ export class UserService {
       { id: updateUserInput.id },
       { ...updateUserInput },
     );
-
     return await this.getOneUser(updateUserInput.id);
   }
 }
