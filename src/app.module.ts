@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { config } from 'rxjs';
 import { UsersModule } from './users/users.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver } from '@nestjs/apollo';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { GraphQLModule } from '@nestjs/graphql';
       autoSchemaFile: 'schema.gql',
       sortSchema: true,
       playground: true,
+      driver: ApolloDriver,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -19,6 +21,7 @@ import { GraphQLModule } from '@nestjs/graphql';
       inject: [ConfigService],
       useFactory: async (config: ConfigService) => ({
         type: config.get<'postgres'>('TYPEORM_CONNECTION'),
+        host: config.get<string>('TYPEORM_HOST'),
         username: config.get<string>('TYPEORM_USERNAME'),
         password: config.get<string>('TYPEORM_PASSWORD'),
         database: config.get<string>('TYPEORM_DATABASE'),
