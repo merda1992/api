@@ -19,7 +19,7 @@ import { ApolloDriver } from '@nestjs/apollo';
 			imports: [ ConfigModule ],
 			inject: [ ConfigService ],
 			useFactory: async (config: ConfigService) => ({
-				type: config.get<'postgres'>('TYPEORM_CONNECTION'),
+				type: config.get<'mysql'>('TYPEORM_CONNECTION'),
 				host: config.get<string>('TYPEORM_HOST'),
 				username: config.get<string>('TYPEORM_USERNAME'),
 				password: config.get<string>('TYPEORM_PASSWORD'),
