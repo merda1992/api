@@ -36,7 +36,7 @@ export class UserEntity {
   @Column({ nullable: true })
   name: string;
 
-  @Column({ select: false })
+  @Column()
   password: string;
 
   @Field(() => String)
@@ -47,4 +47,16 @@ export class UserEntity {
   })
   @Index('IDX_USERS_STATUS')
   status: UserStatus;
+}
+
+@ObjectType()
+@Entity('auth')
+export class AuthEntity {
+  @Field()
+  @Column()
+  token: string;
+
+  @Column()
+  @Field()
+  user: UserEntity;
 }

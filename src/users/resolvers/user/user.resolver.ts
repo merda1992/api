@@ -1,39 +1,47 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 
-import { UserService } from '../../services/user/user.service'
-import { UserEntity } from '../../entities/user.entity'
-import { CreateUserInput } from '../../inputs/create-user.input'
-import { UpdateUserInput } from '../../inputs/update-user.input'
+import { UserService } from '../../services/user/user.service';
+import { UserEntity } from '../../entities/user.entity';
+import { CreateUserInput } from '../../inputs/create-user.input';
+import { UpdateUserInput } from '../../inputs/update-user.input';
+import { AuthEntity } from '../../entities/user.entity';
+import { AuthInput } from '@api/users/inputs/auth.input';
 
 @Resolver('User')
 export class UserResolver {
-	constructor(
-		private readonly userService: UserService,
-	) {
-	}
+  constructor(private readonly userService: UserService) {}
 
-	@Mutation(() => UserEntity)
-	async createUser(@Args('createUser') createUserInput: CreateUserInput): Promise<UserEntity> {
-		return await this.userService.createUser(createUserInput)
-	}
+  @Mutation(() => UserEntity)
+  async createUser(
+    @Args('createUser') createUserInput: CreateUserInput,
+  ): Promise<UserEntity> {
+    return await this.userService.createUser(createUserInput);
+  }
 
-	@Mutation(() => UserEntity)
-	async updateUser(@Args('updateUser') updateUserInput: UpdateUserInput): Promise<UserEntity> {
-		return await this.userService.updateUser(updateUserInput)
-	}
+  @Mutation(() => AuthEntity)
+  async login(@Args('auth') authInput: AuthInput): Promise<AuthEntity> {
+    return await this.userService.login(authInput);
+  }
 
-	@Mutation(() => Number)
-	async removeUser(@Args('id') id: number): Promise<number> {
-		return await this.userService.removeUser(id)
-	}
+  @Mutation(() => UserEntity)
+  async updateUser(
+    @Args('updateUser') updateUserInput: UpdateUserInput,
+  ): Promise<UserEntity> {
+    return await this.userService.updateUser(updateUserInput);
+  }
 
-	@Query(() => UserEntity)
-	async getOneUser(@Args('id') id: number): Promise<UserEntity> {
-		return await this.userService.getOneUser(id)
-	}
+  @Mutation(() => Number)
+  async removeUser(@Args('id') id: number): Promise<number> {
+    return await this.userService.removeUser(id);
+  }
 
-	@Query(() => [ UserEntity ])
-	async getAllUsers(): Promise<UserEntity[]> {
-		return await this.userService.getAllUsers()
-	}
+  @Query(() => UserEntity)
+  async getOneUser(@Args('id') id: number): Promise<UserEntity> {
+    return await this.userService.getOneUser(id);
+  }
+
+  @Query(() => [UserEntity])
+  async getAllUsers(): Promise<UserEntity[]> {
+    return await this.userService.getAllUsers();
+  }
 }
