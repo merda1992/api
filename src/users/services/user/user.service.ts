@@ -38,11 +38,15 @@ export class UserService {
     return { token, user };
   }
 
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt(10);
+    return await bcrypt.hash(password, salt);
+  }
+
   async createUser(createUserInput: CreateUserInput): Promise<UserEntity> {
     const { password } = createUserInput;
 
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(password, salt);
+    const hash = await this.hashPassword(password);
 
     return await this.userRepository.save({
       ...createUserInput,
@@ -64,9 +68,19 @@ export class UserService {
   }
 
   async updateUser(updateUserInput: UpdateUserInput): Promise<UserEntity> {
+    const { password, ...otherOption } = updateUserInput;
+
+    let newOptions = {};
+
+    if (password) {
+      const hash = await this.hashPassword(password);
+
+      newOptions = { ...otherOption, password: hash };
+    }
+
     await this.userRepository.update(
       { id: updateUserInput.id },
-      { ...updateUserInput },
+      password ? { ...newOptions } : { ...otherOption },
     );
     return await this.getOneUser(updateUserInput.id);
   }

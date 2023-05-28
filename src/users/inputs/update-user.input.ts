@@ -6,11 +6,11 @@ export class UpdateUserInput {
 	id: number
 
 	@Field({ nullable: true })
-	email: string
+	email?: string
 
 	@Field({ nullable: true })
-	name: string
+	name?: string
 
 	@Field({ nullable: true })
-	password: string
+	password?: string
 }
