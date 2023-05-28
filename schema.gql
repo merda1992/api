@@ -2,9 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type AuthEntity {
+  token: String!
+  user: UserEntity!
+}
+
+input AuthInput {
+  email: String!
+  password: String!
+}
+
 input CreateUserInput {
   email: String!
   name: String
+  password: String!
 }
 
 """
@@ -14,6 +25,7 @@ scalar DateTime
 
 type Mutation {
   createUser(createUser: CreateUserInput!): UserEntity!
+  login(auth: AuthInput!): AuthEntity!
   removeUser(id: Float!): Float!
   updateUser(updateUser: UpdateUserInput!): UserEntity!
 }
@@ -27,6 +39,7 @@ input UpdateUserInput {
   email: String
   id: ID!
   name: String
+  password: String
 }
 
 type UserEntity {

@@ -1,4 +1,5 @@
 FROM node:20-alpine AS builder
+RUN npm cache clean --force
 WORKDIR /app
 COPY /*.json ./
 COPY . .
