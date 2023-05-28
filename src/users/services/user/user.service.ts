@@ -1,7 +1,9 @@
+const bcrypt = require('bcryptjs');
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../entities/user.entity';
-import * as bcrypt from 'bcrypt';
+
 import { Repository } from 'typeorm';
 import { CreateUserInput } from '../../inputs/create-user.input';
 import { UpdateUserInput } from '../../inputs/update-user.input';
@@ -28,7 +30,7 @@ export class UserService {
     const validPassword = await bcrypt.compare(password, user.password);
 
     if (!validPassword) {
-      throw new Error('Invalid password erewrwer');
+      throw new Error('Invalid password');
     }
 
     const token = 'jwt-token-goes-here';
