@@ -1,3 +1,4 @@
+import { hashPassword, createToken } from 'utils/authUtils';
 const bcrypt = require('bcryptjs');
 
 import { Injectable } from '@nestjs/common';
@@ -33,20 +34,15 @@ export class UserService {
       throw new Error('Invalid password');
     }
 
-    const token = 'jwt-token-goes-here';
+    const token = await createToken({ user });
 
     return { token, user };
-  }
-
-  async hashPassword(password: string): Promise<string> {
-    const salt = await bcrypt.genSalt(10);
-    return await bcrypt.hash(password, salt);
   }
 
   async createUser(createUserInput: CreateUserInput): Promise<UserEntity> {
     const { password } = createUserInput;
 
-    const hash = await this.hashPassword(password);
+    const hash = await hashPassword(password);
 
     return await this.userRepository.save({
       ...createUserInput,
@@ -73,7 +69,7 @@ export class UserService {
     let newOptions = {};
 
     if (password) {
-      const hash = await this.hashPassword(password);
+      const hash = await hashPassword(password);
 
       newOptions = { ...otherOption, password: hash };
     }
