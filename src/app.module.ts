@@ -5,6 +5,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 
 import { UsersModule } from './users/users.module';
 import { ApolloDriver } from '@nestjs/apollo';
+import { AuthService } from './auth/service/auth.service.spec';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ApolloDriver } from '@nestjs/apollo';
     }),
     UsersModule,
   ],
-  providers: [],
+  providers: [AuthService],
+  exports: [AuthService],
 })
 export class AppModule {}

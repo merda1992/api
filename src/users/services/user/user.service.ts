@@ -1,4 +1,3 @@
-import { hashPassword, createToken } from 'utils/authUtils';
 const bcrypt = require('bcryptjs');
 
 import { Injectable } from '@nestjs/common';
@@ -9,12 +8,14 @@ import { Repository } from 'typeorm';
 import { CreateUserInput } from '../../inputs/create-user.input';
 import { UpdateUserInput } from '../../inputs/update-user.input';
 import { AuthInput } from '@api/users/inputs/auth.input';
+import { AuthService } from '@api/auth/service/auth.service.spec';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly authService: AuthService,
   ) {}
 
   async login(
@@ -34,7 +35,7 @@ export class UserService {
       throw new Error('Invalid password');
     }
 
-    const token = await createToken({ user });
+    const token = await this.authService.createToken({ user });
 
     return { token, user };
   }
@@ -42,7 +43,7 @@ export class UserService {
   async createUser(createUserInput: CreateUserInput): Promise<UserEntity> {
     const { password } = createUserInput;
 
-    const hash = await hashPassword(password);
+    const hash = await this.authService.hashPassword(password);
 
     return await this.userRepository.save({
       ...createUserInput,
@@ -69,7 +70,7 @@ export class UserService {
     let newOptions = {};
 
     if (password) {
-      const hash = await hashPassword(password);
+      const hash = await this.authService.hashPassword(password);
 
       newOptions = { ...otherOption, password: hash };
     }

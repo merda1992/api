@@ -6,6 +6,7 @@ import { CreateUserInput } from '../../inputs/create-user.input';
 import { UpdateUserInput } from '../../inputs/update-user.input';
 import { AuthEntity } from '../../entities/user.entity';
 import { AuthInput } from '@api/users/inputs/auth.input';
+import { AuthService } from '@api/auth/service/auth.service.spec';
 
 @Resolver('User')
 export class UserResolver {
