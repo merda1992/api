@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-import jsonwebtoken from 'jsonwebtoken';
+import * as jwt from 'jsonwebtoken';
 import { UserEntity } from '@api/users/entities/user.entity';
 
 export const hashPassword = async (password: string): Promise<string> => {
@@ -8,20 +8,12 @@ export const hashPassword = async (password: string): Promise<string> => {
   return await bcrypt.hash(password, salt);
 };
 
-export function createToken({
-  user,
-  publicApi,
-}: {
-  user: UserEntity;
-  publicApi?: boolean;
-}): string {
-  const secret = publicApi
-    ? process.env.PUBLIC_API_JWT_SECRET
-    : process.env.JWT_SECRET;
+export function createToken({ user }: { user: UserEntity }): string {
+  const secret = 'secret';
 
-  const signOptions: jsonwebtoken.SignOptions = {
+  const signOptions: jwt.SignOptions = {
     algorithm: 'HS256',
   };
 
-  return jsonwebtoken.sign({ id: user.id }, secret, signOptions);
+  return jwt.sign({ id: user.id }, secret, signOptions);
 }
