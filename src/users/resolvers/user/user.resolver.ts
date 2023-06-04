@@ -1,12 +1,13 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver, Context } from '@nestjs/graphql';
 
 import { UserService } from '../../services/user/user.service';
+import { UseGuards } from '@nestjs/common';
 import { UserEntity } from '../../entities/user.entity';
 import { CreateUserInput } from '../../inputs/create-user.input';
 import { UpdateUserInput } from '../../inputs/update-user.input';
 import { AuthEntity } from '../../entities/user.entity';
 import { AuthInput } from '@api/users/inputs/auth.input';
-import { AuthService } from '@api/auth/service/auth.service.spec';
+import { JwtAuthGuard } from '@api/auth/jwt-auth.guard';
 
 @Resolver('User')
 export class UserResolver {
@@ -44,5 +45,11 @@ export class UserResolver {
   @Query(() => [UserEntity])
   async getAllUsers(): Promise<UserEntity[]> {
     return await this.userService.getAllUsers();
+  }
+
+  @Query((returns) => UserEntity, { nullable: true })
+  @UseGuards(JwtAuthGuard)
+  currentUser(@Context() ctx): UserEntity {
+    return ctx.req.user;
   }
 }

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
+import { PassportModule } from '@nestjs/passport';
 
 import { UsersModule } from './users/users.module';
 import { ApolloDriver } from '@nestjs/apollo';
@@ -16,6 +17,7 @@ import { AuthService } from './auth/service/auth.service.spec';
       playground: true,
       driver: ApolloDriver,
     }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

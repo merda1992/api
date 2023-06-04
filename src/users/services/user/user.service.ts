@@ -1,5 +1,3 @@
-const bcrypt = require('bcryptjs');
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from '../../entities/user.entity';
@@ -29,13 +27,13 @@ export class UserService {
       throw new Error('User not found');
     }
 
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = await this.authService.checkValidPassword(password, user.password);
 
     if (!validPassword) {
       throw new Error('Invalid password');
     }
 
-    const token = await this.authService.createToken({ user });
+    const token = this.authService.createToken({ user });
 
     return { token, user };
   }
