@@ -15,22 +15,6 @@ export class AuthService {
     return jwt.sign({ id: user.id }, this.jwtSecret, signOptions);
   }
 
-  async validateToken(auth: string) {
-    if (auth.split(' ')[0] !== 'Bearer') {
-      throw new Error('Invalid token format');
-    }
-
-    const token = auth.split(' ')[1];
-
-    try {
-      const payload = await jwt.verify(token, this.jwtSecret);
-
-      return payload;
-    } catch (e) {
-      throw new Error('Unauthorized');
-    }
-  }
-
   async hashPassword(password: string): Promise<string> {
     const salt = await bcrypt.genSalt(10);
 

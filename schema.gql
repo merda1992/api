@@ -31,7 +31,6 @@ type Mutation {
 }
 
 type Query {
-  currentUser: UserEntity
   getAllUsers: [UserEntity!]!
   getOneUser(id: Float!): UserEntity!
 }

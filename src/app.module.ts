@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { PassportModule } from '@nestjs/passport';
@@ -7,6 +8,8 @@ import { PassportModule } from '@nestjs/passport';
 import { UsersModule } from './users/users.module';
 import { ApolloDriver } from '@nestjs/apollo';
 import { AuthService } from './auth/service/auth.service.spec';
+import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -18,6 +21,10 @@ import { AuthService } from './auth/service/auth.service.spec';
       driver: ApolloDriver,
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.register({
+      secret: 'my-secret-key',
+      signOptions: { expiresIn: '60m' },
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

@@ -26,14 +26,19 @@ export class UserResolver {
   }
 
   @Mutation(() => UserEntity)
+  @UseGuards(JwtAuthGuard)
   async updateUser(
     @Args('updateUser') updateUserInput: UpdateUserInput,
   ): Promise<UserEntity> {
+
     return await this.userService.updateUser(updateUserInput);
   }
 
   @Mutation(() => Number)
-  async removeUser(@Args('id') id: number): Promise<number> {
+  @UseGuards(JwtAuthGuard)
+  async removeUser(
+    @Args('id') id: number,
+  ): Promise<number> {
     return await this.userService.removeUser(id);
   }
 
@@ -43,13 +48,8 @@ export class UserResolver {
   }
 
   @Query(() => [UserEntity])
+  @UseGuards(JwtAuthGuard)
   async getAllUsers(): Promise<UserEntity[]> {
     return await this.userService.getAllUsers();
-  }
-
-  @Query((returns) => UserEntity, { nullable: true })
-  @UseGuards(JwtAuthGuard)
-  currentUser(@Context() ctx): UserEntity {
-    return ctx.req.user;
   }
 }
